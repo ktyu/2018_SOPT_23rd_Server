@@ -110,7 +110,7 @@ public class UserService {
     @Transactional
     public DefaultRes deleteByUserIdx(final int userIdx) {
         final User user = userMapper.findByUserIdx(userIdx);
-        if (user != null)
+        if (user == null)
             return DefaultRes.res(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER);
 
         try {
