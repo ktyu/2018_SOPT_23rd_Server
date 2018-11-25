@@ -5,12 +5,11 @@ import lombok.Data;
 
 @Data
 public class User {
-//    private int idx;
+//    private int userIdx; // auto-increment 값임
+
     private String id;
 //    private String password;
     private String profileUrl;
     private String name;
     private String part;
-
-//  private MultipartFile profilePic;
 }

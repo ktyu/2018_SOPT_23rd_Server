@@ -3,6 +3,7 @@ package org.sopt.report5.service.impl;
 import org.sopt.report5.dto.User;
 import org.sopt.report5.mapper.UserMapper;
 import org.sopt.report5.model.DefaultRes;
+import org.sopt.report5.model.SignUpReq;
 import org.sopt.report5.service.UserService;
 import org.sopt.report5.util.ResponseMessage;
 import org.sopt.report5.util.StatusCode;
@@ -41,7 +42,7 @@ public class UserServiceImpl implements UserService {
 
         // 저장된 유저가 없으면 NOT_FOUND 리턴
         if (userList.isEmpty())
-            return DefaultRes.res(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER);
+            return DefaultRes.res(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER, "없습니다");
 
         // 리스트가 비어있지않으면 유저정보 리스트 리턴
         return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_USER, userList);
@@ -58,7 +59,7 @@ public class UserServiceImpl implements UserService {
 
         // 저장된 유저가 없으면 NOT_FOUND 리턴
         else if(userList.size() == 0) {
-            return DefaultRes.res(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER);
+            return DefaultRes.res(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER, "없습니다");
         }
 
         // 복수의 유저가 검색되었으면 List 로 전체 다 리턴
@@ -76,7 +77,7 @@ public class UserServiceImpl implements UserService {
 
         // 저장된 유저가 없으면 NOT_FOUND 리턴
         else if(userList.size() == 0) {
-            return DefaultRes.res(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER);
+            return DefaultRes.res(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER, "없습니다");
         }
 
         // 복수의 유저가 검색되었으면 List 로 전체 다 리턴
@@ -89,20 +90,34 @@ public class UserServiceImpl implements UserService {
 
         // 검색된 user 가 없을 경우
         if (user == null)
-            return DefaultRes.res(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER);
+            return DefaultRes.res(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER, "없습니다");
 
         return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_USER, user);
 
     }
 
     @Override
-    public DefaultRes addUser(User user) {
-        return null;
+    public DefaultRes addUser(SignUpReq signUpReq) {
+        try {
+            Integer userIdx = userMapper.insertUser(signUpReq);
+            return DefaultRes.res(StatusCode.CREATED, ResponseMessage.CREATED_USER, userIdx);
+        } catch(Exception e) {
+            return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
+        }
     }
 
     @Override
-    public DefaultRes modifyUser(String id, User user) {
-        return null;
+    public DefaultRes modifyUser(String id, SignUpReq signUpReq) {
+        // 해당 유저가 존재하는지 확인
+        if(this.findById(id).getStatus() != 200)
+            return DefaultRes.res(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER, "없습니다");
+
+        try {
+            userMapper.updateUser(signUpReq);
+            return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.UPDATE_USER);
+        } catch(Exception e) {
+            return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
+        }
     }
 
 
@@ -110,7 +125,7 @@ public class UserServiceImpl implements UserService {
     public DefaultRes deleteUser(String id) {
         // 해당 유저가 존재하는지 확인
         if(this.findById(id).getStatus() != 200)
-            return DefaultRes.res(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER);
+            return DefaultRes.res(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER, "없습니다");
 
         try {
             userMapper.deleteUser(id);

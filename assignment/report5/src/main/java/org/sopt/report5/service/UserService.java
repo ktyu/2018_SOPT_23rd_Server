@@ -2,6 +2,7 @@ package org.sopt.report5.service;
 
 import org.sopt.report5.dto.User;
 import org.sopt.report5.model.DefaultRes;
+import org.sopt.report5.model.SignUpReq;
 
 
 public interface UserService {
@@ -22,10 +23,10 @@ public interface UserService {
     DefaultRes findById(final String id);
 
     // 회원 정보 저장
-    DefaultRes addUser(final User user);
+    DefaultRes addUser(final SignUpReq signUpReq);
 
     // 회원 정보 수정
-    DefaultRes modifyUser(final String id, final User user);
+    DefaultRes modifyUser(String id, SignUpReq signUpReq);
 
     // 회원 삭제
     DefaultRes deleteUser(final String id);

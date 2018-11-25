@@ -1,5 +1,6 @@
 package org.sopt.report5.api;
 
+import org.sopt.report5.model.SignUpReq;
 import org.sopt.report5.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,9 +50,23 @@ public class UserController {
     }
 
     @GetMapping("/users/{user_id}")
-    public ResponseEntity getUserByIdx(@PathVariable(value = "user_id") final String id) {
+    public ResponseEntity getUserById(@PathVariable(value = "user_id") final String id) {
         return new ResponseEntity<>(userService.findById(id), HttpStatus.OK);
     }
 
+    @PostMapping("/users")
+    public ResponseEntity addUser(@RequestBody final SignUpReq signUpReq) {
+        return new ResponseEntity<>(userService.addUser(signUpReq), HttpStatus.OK);
+    }
 
+    @PutMapping("/users/{user_id}")
+    public ResponseEntity modifyUserById(@PathVariable(value = "user_id") final String id,
+                                         @RequestBody final SignUpReq signUpReq) {
+        return new ResponseEntity<>(userService.modifyUser(id, signUpReq), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/users/{user_id}")
+    public ResponseEntity deleteUser(@PathVariable(value = "user_id") final String id) {
+        return new ResponseEntity<>(userService.deleteUser(id), HttpStatus.OK);
+    }
 }
