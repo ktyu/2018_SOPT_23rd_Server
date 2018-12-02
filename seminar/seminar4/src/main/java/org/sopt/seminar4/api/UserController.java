@@ -30,7 +30,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @Auth
+    //@Auth
     @GetMapping("")
     public ResponseEntity getUser(@RequestParam("name") final Optional<String> name) {
         try {
