@@ -13,7 +13,7 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
 
-    //모든 회원 리스트 조회
+    //모든 회원 리스트 조회 - ArrayList
     @Select("SELECT * FROM user")
     List<User> findAll();
 
